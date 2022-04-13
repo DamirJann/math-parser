@@ -17,5 +17,5 @@ type lexicalAnalyzer struct {
 }
 
 func (lexicalAnalyzer) tokenize() []Token {
-
+	return []Token{}
 }
