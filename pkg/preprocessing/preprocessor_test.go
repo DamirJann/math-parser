@@ -32,5 +32,4 @@ func happyFlowGetRidOfSpace(t *testing.T) {
 
 	// assert
 	assert.Equal(t, output, "4+5-1+10-var1-1")
-
 }

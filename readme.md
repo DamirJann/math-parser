@@ -1,4 +1,6 @@
 ## Syntaxis
 
 * `digit → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9`
-* `list   → list + digit | list - digit | digit`
+* `factor → digit | (expr)`
+* `term → term * factor | term / factor | factor`
+* `expr → expr + term | expr - term | term`
