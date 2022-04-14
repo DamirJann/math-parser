@@ -4,3 +4,7 @@
 * `factor → digit | (expr)`
 * `term → term * factor | term / factor | factor`
 * `expr → expr + term | expr - term | term`
+
+## Automata for lexical analyzer
+
+![Lexical Analyzer Automata](https://github.com/DamirJann/math-parser/blob/master/img/automata_for_lexical_analyzer.drawio.png)
