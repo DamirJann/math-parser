@@ -1,14 +1,36 @@
 package lexical_analysis
 
-type tokenName int
+import (
+	"strconv"
+)
+
+type Tag int
 
 const (
-	IDENTIFIER tokenName = iota
+	IDENTIFIER Tag = iota
 	NUMBER
 	OPERATOR
 )
 
-type Token struct {
-	name  tokenName
-	value string
+type token struct {
+	tag   Tag
+	Value interface{}
+}
+
+func newNumberToken(lexem string) (*token, error) {
+	if i, err := strconv.Atoi(lexem); err == nil {
+		return &token{
+			tag:   NUMBER,
+			Value: i,
+		}, nil
+	} else {
+		return nil, err
+	}
+}
+
+func newOperatorToken(lexem string) (*token, error) {
+	return &token{
+		tag:   OPERATOR,
+		Value: lexem,
+	}, nil
 }
