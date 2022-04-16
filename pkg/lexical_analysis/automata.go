@@ -18,6 +18,25 @@ func NewAutomata() Automata {
 	return &automata{}
 }
 
+func (a *automata) Peek() (byte, error) {
+	return a.input.ReadByte()
+}
+
+func (a *automata) Lookahead() (byte, error) {
+	b, err := a.input.ReadByte()
+	if err == nil {
+		err = a.input.UnreadByte()
+	}
+	if err == io.EOF {
+		return EOF, nil
+	}
+	return b, err
+}
+
+func (a *automata) Unread() error {
+	return a.input.UnreadByte()
+}
+
 func (a *automata) extractToken(input *bytes.Buffer) (*token, error) {
 	a.input = input
 	return a.s1("")
@@ -59,17 +78,20 @@ func (a *automata) s3(lexem string) (*token, error) {
 		return nil, err
 	}
 
-	if nextState := a.s3TransitTo(peek); nextState != nil {
-		return nextState(lexem + string(peek))
-	} else {
-		a.Unread()
-		return a.s2(lexem)
-	}
-
+	nextState := a.s3TransitTo(peek)
+	return nextState(lexem + string(peek))
 }
 
 func (a *automata) s4(lexem string) (*token, error) {
 	return newOperatorToken(lexem)
+}
+
+func (a *automata) s5(lexem string) (*token, error) {
+	if err := a.Unread(); err != nil {
+		return nil, err
+	}
+	return newNumberToken(lexem[0 : len(lexem)-1])
+
 }
 
 func (a *automata) s1TransitTo(lookahead byte) func(string) (*token, error) {
@@ -94,7 +116,7 @@ func (a *automata) s1TransitTo(lookahead byte) func(string) (*token, error) {
 }
 
 func (a *automata) s3TransitTo(lookahead byte) func(string) (*token, error) {
-	return map[byte]func(string) (*token, error){
+	next, ok := map[byte]func(string) (*token, error){
 		ZERO:  a.s3,
 		ONE:   a.s3,
 		TWO:   a.s3,
@@ -106,27 +128,8 @@ func (a *automata) s3TransitTo(lookahead byte) func(string) (*token, error) {
 		EIGHT: a.s3,
 		NINE:  a.s3,
 	}[lookahead]
-}
-
-func (a *automata) Peek() (byte, error) {
-	b, err := a.input.ReadByte()
-	if err == io.EOF {
-		return EOF, nil
+	if ok {
+		return next
 	}
-	return b, err
-}
-
-func (a *automata) Lookahead() (byte, error) {
-	b, err := a.input.ReadByte()
-	if err == nil {
-		err = a.input.UnreadByte()
-	}
-	if err == io.EOF {
-		return EOF, nil
-	}
-	return b, err
-}
-
-func (a *automata) Unread() error {
-	return a.input.UnreadByte()
+	return a.s5
 }

@@ -20,8 +20,8 @@ type lexicalAnalyzer struct {
 	automata Automata
 }
 
-func (la lexicalAnalyzer) Tokenize(input string) (output []token, err error) {
-	la.input = bytes.NewBufferString(input)
+func (la *lexicalAnalyzer) Tokenize(input string) (output []token, err error) {
+	la.initBuffer(input)
 	for {
 		t, err := la.automata.extractToken(la.input)
 		if err == io.EOF {
@@ -33,4 +33,9 @@ func (la lexicalAnalyzer) Tokenize(input string) (output []token, err error) {
 		output = append(output, *t)
 	}
 	return output, nil
+}
+
+func (la *lexicalAnalyzer) initBuffer(input string) {
+	la.input = bytes.NewBufferString(input)
+	la.input.WriteByte(EOF)
 }

@@ -27,8 +27,12 @@ func TestLexicalAnalyzer_Tokenize(t *testing.T) {
 			scenario: happyFlowTokenizeTheOnlyLexem,
 		},
 		{
-			name:     "Unhappy flow. Tokenize `0`",
+			name:     "Happy flow. Tokenize `0`",
 			scenario: happyFlowTokenize0,
+		},
+		{
+			name:     "Happy flow. Tokenize 0123",
+			scenario: happyFlowTokenize0123,
 		},
 	}
 
@@ -120,4 +124,21 @@ func happyFlowTokenize0(t *testing.T) {
 
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(ts), 1)
+}
+
+func happyFlowTokenize0123(t *testing.T) {
+	// arrange
+	automata := NewAutomata()
+	lexicalAnalyzer := NewLexicalAnalyzer(automata)
+
+	// act
+	ts, err := lexicalAnalyzer.Tokenize("0123")
+
+	// assert
+
+	assert.Equal(t, err, nil)
+	assert.Equal(t, len(ts), 2)
+	assert.Equal(t, ts[0].Value.(int), 0)
+	assert.Equal(t, ts[1].Value.(int), 123)
+
 }
