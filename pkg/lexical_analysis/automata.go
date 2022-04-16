@@ -4,14 +4,16 @@ import (
 	"bytes"
 	"errors"
 	"io"
+	"math-parser/pkg/entity"
 )
 
 type automata struct {
 	input *bytes.Buffer
+	lexem string
 }
 
 type Automata interface {
-	extractToken(input *bytes.Buffer) (*token, error)
+	extractToken(input *bytes.Buffer) (*entity.Token, error)
 }
 
 func NewAutomata() Automata {
@@ -37,10 +39,11 @@ func (a *automata) Unread() error {
 	return a.input.UnreadByte()
 }
 
-func (a *automata) extractToken(input *bytes.Buffer) (*token, error) {
+func (a *automata) extractToken(input *bytes.Buffer) (*entity.Token, error) {
 	a.input = input
-	lookahead, err := a.Lookahead()
+	a.lexem = ""
 
+	lookahead, err := a.Lookahead()
 	if lookahead == EOF {
 		return nil, io.EOF
 	}
@@ -48,10 +51,10 @@ func (a *automata) extractToken(input *bytes.Buffer) (*token, error) {
 		return nil, err
 	}
 
-	return a.s1("")
+	return a.s1()
 }
 
-func (a *automata) s1(lexem string) (*token, error) {
+func (a *automata) s1() (*entity.Token, error) {
 	peek, err := a.Peek()
 
 	if err != nil {
@@ -59,54 +62,57 @@ func (a *automata) s1(lexem string) (*token, error) {
 	}
 
 	if nextState := a.s1TransitTo(peek); nextState != nil {
-		lexem += string(peek)
-		return nextState(lexem)
+		a.lexem += string(peek)
+		return nextState()
 	} else {
 		return nil, errors.New("[LOG][Automata]: Error in S1 state")
 	}
 
 }
 
-func (a *automata) s2(lexem string) (*token, error) {
+func (a *automata) s2() (*entity.Token, error) {
 
-	if t, err := newNumberToken(lexem); err == nil {
+	if t, err := entity.NewNumberToken(a.lexem); err == nil {
 		return t, nil
 	} else {
 		return nil, err
 	}
 }
 
-func (a *automata) s3(lexem string) (*token, error) {
+func (a *automata) s3() (*entity.Token, error) {
 	peek, err := a.Peek()
 
 	if err != nil {
 		return nil, err
 	}
 
+	a.lexem += string(peek)
 	nextState := a.s3TransitTo(peek)
-	return nextState(lexem + string(peek))
+	return nextState()
 }
 
-func (a *automata) s4(lexem string) (*token, error) {
-	return newOperatorToken(lexem)
+func (a *automata) s4() (*entity.Token, error) {
+	return entity.NewOperatorToken(a.lexem)
 }
 
-func (a *automata) s5(lexem string) (*token, error) {
+func (a *automata) s5() (*entity.Token, error) {
 	if err := a.Unread(); err != nil {
 		return nil, err
 	}
-	return newNumberToken(lexem[0 : len(lexem)-1])
+	return entity.NewNumberToken(a.lexem[0 : len(a.lexem)-1])
 
 }
 
-func (a *automata) s1TransitTo(lookahead byte) func(string) (*token, error) {
-	return map[byte]func(string) (*token, error){
+func (a *automata) s1TransitTo(lookahead byte) func() (*entity.Token, error) {
+	return map[byte]func() (*entity.Token, error){
 		ZERO: a.s2,
 
 		PLUS:           a.s4,
 		MINUS:          a.s4,
 		MULTIPLICATION: a.s4,
 		DIVISION:       a.s4,
+		LEFT_BRACKET:   a.s4,
+		RIGHT_BRACKET:  a.s4,
 
 		ONE:   a.s3,
 		TWO:   a.s3,
@@ -120,8 +126,8 @@ func (a *automata) s1TransitTo(lookahead byte) func(string) (*token, error) {
 	}[lookahead]
 }
 
-func (a *automata) s3TransitTo(lookahead byte) func(string) (*token, error) {
-	next, ok := map[byte]func(string) (*token, error){
+func (a *automata) s3TransitTo(lookahead byte) func() (*entity.Token, error) {
+	next, ok := map[byte]func() (*entity.Token, error){
 		ZERO:  a.s3,
 		ONE:   a.s3,
 		TWO:   a.s3,

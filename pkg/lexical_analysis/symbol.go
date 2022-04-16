@@ -18,4 +18,7 @@ const (
 	DIVISION       = byte('/')
 
 	EOF = 0
+
+	LEFT_BRACKET  = byte('(')
+	RIGHT_BRACKET = byte(')')
 )

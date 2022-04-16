@@ -1,10 +1,32 @@
-## Syntaxis
+### Grammar
 
-* `digit → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9`
-* `factor → digit | (expr)`
-* `term → term * factor | term / factor | factor`
-* `expr → expr + term | expr - term | term`
+This is LL(1) grammar
+* `FACTOR ⟶ number | ( EXPR )`
+* `TERM ⟶ FACTOR TERM1`
+* `TERM1 ⟶ * FACTOR TERM1 | / FACTOR TERM1 | epsilon`
+* `EXPR ⟶ TERM EXPR1`
+* `EXPR1 ⟶ * TERM TERM1 | / TERM TERM1 | epsilon`
+
+
+###  First and Follow
+* `FIRST(FACTOR) = { number, ( }`
+* `FIRST(TERM) = { number, ( }`
+* `FIRST(EXPR) = { number, ( }`
+* `FIRST(EXPR1) = { +, -, epsilon }`
+* `FIRST(TERM1) = { *, /, epsilon }` 
+
+
+* `FOLLOW(FACTOR) = { ), *, /, +, - }`
+* `FOLLOW(TERM) = { ), +, - }`
+* `FOLLOW(EXPR) = { ) }`
+* `FOLLOW(EXPR1) = { ) }`
+* `FOLLOW(TERM1) = { ), +, - }`
+
+
+
+Computed by https://mikedevice.github.io/first-follow/
 
 ## Automata for lexical analyzer
 
 ![Lexical Analyzer Automata](https://github.com/DamirJann/math-parser/blob/master/img/automata_for_lexical_analyzer.drawio.png)
+

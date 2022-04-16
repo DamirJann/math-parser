@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"math-parser/pkg/entity"
 	"math-parser/pkg/utils/logging"
 )
 
@@ -15,7 +16,7 @@ func NewLexicalAnalyzer(ctx context.Context, automata Automata) LexicalAnalyzer 
 }
 
 type LexicalAnalyzer interface {
-	Tokenize(input string) ([]token, error)
+	Tokenize(input string) ([]entity.Token, error)
 }
 
 type lexicalAnalyzer struct {
@@ -24,7 +25,7 @@ type lexicalAnalyzer struct {
 	logging  logging.Logger
 }
 
-func (la *lexicalAnalyzer) Tokenize(input string) (output []token, err error) {
+func (la *lexicalAnalyzer) Tokenize(input string) (output []entity.Token, err error) {
 	la.initBuffer(input)
 	for {
 		t, err := la.automata.extractToken(la.input)

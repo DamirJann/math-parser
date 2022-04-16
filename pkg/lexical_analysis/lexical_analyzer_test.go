@@ -36,6 +36,10 @@ func TestLexicalAnalyzer_Tokenize(t *testing.T) {
 			name:     "Happy flow. Tokenize 0123",
 			scenario: happyFlowTokenize0123,
 		},
+		{
+			name:     "Happy flow. Tokenize expression with brackets",
+			scenario: happyFlowTokenizeExpressionWithBrackets,
+		},
 	}
 
 	t.Parallel()
@@ -131,7 +135,6 @@ func happyFlowTokenize0(t *testing.T) {
 	ts, err := lexicalAnalyzer.Tokenize("0")
 
 	// assert
-
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(ts), 1)
 }
@@ -147,10 +150,29 @@ func happyFlowTokenize0123(t *testing.T) {
 	ts, err := lexicalAnalyzer.Tokenize("0123")
 
 	// assert
-
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(ts), 2)
 	assert.Equal(t, ts[0].Value.(int), 0)
 	assert.Equal(t, ts[1].Value.(int), 123)
+}
+
+func happyFlowTokenizeExpressionWithBrackets(t *testing.T) {
+	// arrange
+	ctx := context.WithValue(context.Background(), "logger", logging.NewBuiltinLogger())
+
+	automata := NewAutomata()
+	lexicalAnalyzer := NewLexicalAnalyzer(ctx, automata)
+
+	// act
+	ts, err := lexicalAnalyzer.Tokenize("(123+5)")
+
+	// assert
+	assert.Equal(t, err, nil)
+	assert.Equal(t, len(ts), 5)
+	assert.Equal(t, ts[0].Value.(string), "(")
+	assert.Equal(t, ts[1].Value.(int), 123)
+	assert.Equal(t, ts[2].Value.(string), "+")
+	assert.Equal(t, ts[3].Value.(int), 5)
+	assert.Equal(t, ts[4].Value.(string), ")")
 
 }
