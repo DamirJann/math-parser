@@ -2,12 +2,15 @@ package lexical_analysis
 
 import (
 	"bytes"
+	"context"
 	"io"
+	"math-parser/pkg/utils/logging"
 )
 
-func NewLexicalAnalyzer(automata Automata) LexicalAnalyzer {
+func NewLexicalAnalyzer(ctx context.Context, automata Automata) LexicalAnalyzer {
 	return &lexicalAnalyzer{
 		automata: automata,
+		logging:  ctx.Value("logger").(logging.Logger),
 	}
 }
 
@@ -18,6 +21,7 @@ type LexicalAnalyzer interface {
 type lexicalAnalyzer struct {
 	input    *bytes.Buffer
 	automata Automata
+	logging  logging.Logger
 }
 
 func (la *lexicalAnalyzer) Tokenize(input string) (output []token, err error) {
@@ -32,6 +36,7 @@ func (la *lexicalAnalyzer) Tokenize(input string) (output []token, err error) {
 		}
 		output = append(output, *t)
 	}
+	la.logging.Debugf("tokens len=%d: %v", len(output), output)
 	return output, nil
 }
 

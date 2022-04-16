@@ -1,7 +1,9 @@
 package lexical_analysis
 
 import (
+	"context"
 	"gotest.tools/assert"
+	"math-parser/pkg/utils/logging"
 	"testing"
 )
 
@@ -44,8 +46,9 @@ func TestLexicalAnalyzer_Tokenize(t *testing.T) {
 
 func happyFlowTokenizeWithBasicOperations(t *testing.T) {
 	// arrange
+	ctx := context.WithValue(context.Background(), "logger", logging.NewBuiltinLogger())
 	automata := NewAutomata()
-	lexicalAnalyzer := NewLexicalAnalyzer(automata)
+	lexicalAnalyzer := NewLexicalAnalyzer(ctx, automata)
 	expression := "123-555+0-3"
 
 	// act
@@ -65,8 +68,9 @@ func happyFlowTokenizeWithBasicOperations(t *testing.T) {
 
 func happyFlowTokenizeWithAllOperations(t *testing.T) {
 	// arrange
+	ctx := context.WithValue(context.Background(), "logger", logging.NewBuiltinLogger())
 	automata := NewAutomata()
-	lexicalAnalyzer := NewLexicalAnalyzer(automata)
+	lexicalAnalyzer := NewLexicalAnalyzer(ctx, automata)
 	expression := "123*555/0+3-1"
 
 	// act
@@ -88,8 +92,10 @@ func happyFlowTokenizeWithAllOperations(t *testing.T) {
 
 func happyFlowTokenizeEmptyExpression(t *testing.T) {
 	// arrange
+	ctx := context.WithValue(context.Background(), "logger", logging.NewBuiltinLogger())
+
 	automata := NewAutomata()
-	lexicalAnalyzer := NewLexicalAnalyzer(automata)
+	lexicalAnalyzer := NewLexicalAnalyzer(ctx, automata)
 
 	// act
 	ts, err := lexicalAnalyzer.Tokenize("")
@@ -101,8 +107,10 @@ func happyFlowTokenizeEmptyExpression(t *testing.T) {
 
 func happyFlowTokenizeTheOnlyLexem(t *testing.T) {
 	// arrange
+	ctx := context.WithValue(context.Background(), "logger", logging.NewBuiltinLogger())
+
 	automata := NewAutomata()
-	lexicalAnalyzer := NewLexicalAnalyzer(automata)
+	lexicalAnalyzer := NewLexicalAnalyzer(ctx, automata)
 
 	// act
 	ts, err := lexicalAnalyzer.Tokenize("12")
@@ -114,8 +122,10 @@ func happyFlowTokenizeTheOnlyLexem(t *testing.T) {
 
 func happyFlowTokenize0(t *testing.T) {
 	// arrange
+	ctx := context.WithValue(context.Background(), "logger", logging.NewBuiltinLogger())
+
 	automata := NewAutomata()
-	lexicalAnalyzer := NewLexicalAnalyzer(automata)
+	lexicalAnalyzer := NewLexicalAnalyzer(ctx, automata)
 
 	// act
 	ts, err := lexicalAnalyzer.Tokenize("0")
@@ -128,8 +138,10 @@ func happyFlowTokenize0(t *testing.T) {
 
 func happyFlowTokenize0123(t *testing.T) {
 	// arrange
+	ctx := context.WithValue(context.Background(), "logger", logging.NewBuiltinLogger())
+
 	automata := NewAutomata()
-	lexicalAnalyzer := NewLexicalAnalyzer(automata)
+	lexicalAnalyzer := NewLexicalAnalyzer(ctx, automata)
 
 	// act
 	ts, err := lexicalAnalyzer.Tokenize("0123")
