@@ -39,15 +39,20 @@ func (a *automata) Unread() error {
 
 func (a *automata) extractToken(input *bytes.Buffer) (*token, error) {
 	a.input = input
+	lookahead, err := a.Lookahead()
+
+	if lookahead == EOF {
+		return nil, io.EOF
+	}
+	if err != nil {
+		return nil, err
+	}
+
 	return a.s1("")
 }
 
 func (a *automata) s1(lexem string) (*token, error) {
 	peek, err := a.Peek()
-
-	if peek == EOF {
-		return nil, io.EOF
-	}
 
 	if err != nil {
 		return nil, err
@@ -57,7 +62,7 @@ func (a *automata) s1(lexem string) (*token, error) {
 		lexem += string(peek)
 		return nextState(lexem)
 	} else {
-		return nil, errors.New("")
+		return nil, errors.New("[LOG][Automata]: Error in S1 state")
 	}
 
 }
