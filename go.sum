@@ -1,3 +1,5 @@
+github.com/DamirJann/pretty-trie v1.0.3 h1:PCVyqXUHG2JAh2A2FP3FG0mOEnSAKz68IFTGK8aPQ34=
+github.com/DamirJann/pretty-trie v1.0.3/go.mod h1:xHhKldI4bn5Rjvkk0mJN9pHh0GtTGrqRCKUw2hVkYho=
 github.com/google/go-cmp v0.5.7 h1:81/ik6ipDQS2aGcBfIN5dHDB36BwrStyeAQquSYCV4o=
 github.com/google/go-cmp v0.5.7/go.mod h1:n+brtR0CgQNWTVd5ZUFpTBC8YFBDLK/h/bpaJ8/DtOE=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=

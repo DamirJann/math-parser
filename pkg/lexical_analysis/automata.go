@@ -65,7 +65,7 @@ func (a *automata) s1() (*entity.Token, error) {
 		a.lexem += string(peek)
 		return nextState()
 	} else {
-		return nil, errors.New("[LOG][Automata]: Error in S1 state")
+		return nil, errors.New("error in S1 state")
 	}
 
 }

@@ -15,6 +15,8 @@ const (
 	OPERATOR_DIVISION
 	OPERATOR_LEFT_BRACKET
 	OPERATOR_RIGHT_BRACKET
+
+	EPSILON
 )
 
 type Token struct {
@@ -46,4 +48,11 @@ func NewOperatorToken(lexem string) (*Token, error) {
 		Tag:   tokenTag[lexem],
 		Value: lexem,
 	}, nil
+}
+
+func NewEpsilonToken() *Token {
+	return &Token{
+		Tag:   EPSILON,
+		Value: nil,
+	}
 }

@@ -5,7 +5,7 @@ This is LL(1) grammar
 * `TERM ⟶ FACTOR TERM1`
 * `TERM1 ⟶ * FACTOR TERM1 | / FACTOR TERM1 | epsilon`
 * `EXPR ⟶ TERM EXPR1`
-* `EXPR1 ⟶ * TERM TERM1 | / TERM TERM1 | epsilon`
+* `EXPR1 ⟶ + TERM EXPR1 | - TERM EXPR1 | epsilon`
 
 
 ###  First and Follow
