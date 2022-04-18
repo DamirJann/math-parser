@@ -39,9 +39,50 @@ func (l *lL1PredictableParser) Parse(t []*entity.Token) (entity.Ast, error) {
 	if root, err := l.makeExpression(); err == nil {
 		ast := entity.NewAst(root)
 		l.logging.Debugf("computed ast: \n%v", ast.Visualize())
+
+		l.simplify(ast)
+		l.logging.Debugf("simplified ast: \n%v", ast.Visualize())
+
 		return ast, nil
 	} else {
 		return nil, err
+	}
+}
+
+func (l lL1PredictableParser) simplify(ast entity.Ast) {
+	simplify(ast.Root())
+}
+
+func simplify(n entity.Node) {
+	for i := len(n.Child()) - 1; i >= 0; i-- {
+		simplify(n.Child()[i])
+		if len(n.Child()[i].Child()) == 0 && n.Child()[i].Token() == nil {
+			n.Delete(i)
+		}
+
+	}
+
+	for i := len(n.Child()) - 1; i >= 0; i-- {
+		if (n.Child()[i].Token() != nil) && (n.Child()[i].Token().Tag == entity.OPERATOR_LEFT_BRACKET || n.Child()[i].Token().Tag == entity.OPERATOR_RIGHT_BRACKET) {
+			n.Delete(i)
+		}
+	}
+
+	for i := len(n.Child()) - 1; i >= 0; i-- {
+		if n.Child()[i].Token() == nil && len(n.Child()[i].Child()) == 1 {
+			n.Replace(n.Child()[i].Child()[0], i)
+		}
+	}
+
+	for i := len(n.Child()) - 1; i >= 0; i-- {
+		switch n.Child()[i].Label() {
+		case EXPR1:
+			{
+
+				//n.AddChild(n.Child()[i].Child()...)
+				//n.Delete(i)
+			}
+		}
 	}
 
 }
