@@ -49,6 +49,25 @@ func (l *lL1PredictableParser) Parse(t []*entity.Token) (entity.Ast, error) {
 	}
 }
 
+func (l *lL1PredictableParser) Evaluate(t []*entity.Token) (int, error) {
+	ast, err := l.Parse(t)
+	if err != nil {
+		return 0, err
+	}
+	prefNotation, err := toPrefixNotation(ast.Root())
+}
+
+func toPrefixNotation(n entity.Node) (t []*entity.Token, err error) {
+	if n.Token() != nil {
+		return []*entity.Token{n.Token()}, nil
+	} else {
+		for i, child := range n.Child(){
+			if child.Token().Value !=
+		}
+	}
+
+}
+
 func (l lL1PredictableParser) simplify(ast entity.Ast) {
 	simplify(ast.Root())
 }
@@ -76,11 +95,10 @@ func simplify(n entity.Node) {
 
 	for i := len(n.Child()) - 1; i >= 0; i-- {
 		switch n.Child()[i].Label() {
-		case EXPR1:
+		case EXPR1, TERM1:
 			{
-
-				//n.AddChild(n.Child()[i].Child()...)
-				//n.Delete(i)
+				n.AddChild(n.Child()[i].Child()...)
+				n.Delete(i)
 			}
 		}
 	}
