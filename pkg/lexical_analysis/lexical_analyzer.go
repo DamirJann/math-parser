@@ -16,7 +16,7 @@ func NewLexicalAnalyzer(ctx context.Context, automata Automata) LexicalAnalyzer 
 }
 
 type LexicalAnalyzer interface {
-	Tokenize(input string) ([]entity.Token, error)
+	Tokenize(input string) ([]*entity.Token, error)
 }
 
 type lexicalAnalyzer struct {
@@ -25,7 +25,7 @@ type lexicalAnalyzer struct {
 	logging  logging.Logger
 }
 
-func (la *lexicalAnalyzer) Tokenize(input string) (output []entity.Token, err error) {
+func (la *lexicalAnalyzer) Tokenize(input string) (output []*entity.Token, err error) {
 	la.initBuffer(input)
 	for {
 		t, err := la.automata.extractToken(la.input)
@@ -35,7 +35,7 @@ func (la *lexicalAnalyzer) Tokenize(input string) (output []entity.Token, err er
 		if err != nil {
 			return output, err
 		}
-		output = append(output, *t)
+		output = append(output, t)
 	}
 	la.logging.Debugf("tokens len=%d: %v", len(output), output)
 	return output, nil

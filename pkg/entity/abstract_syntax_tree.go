@@ -20,7 +20,9 @@ type Node interface {
 	Evaluate() (int, error)
 	Token() *Token
 	Label() string
-	AddChild(...Node)
+	AddChildToEnd(...Node)
+	AddChild(int, ...Node)
+	AddChildToBegin(...Node)
 	Delete(int)
 	Child() []Node
 	Replace(Node, int)
@@ -32,8 +34,16 @@ func NewAst(root Node) *ast {
 	}
 }
 
-func (n *node) AddChild(c ...Node) {
+func (n *node) AddChildToEnd(c ...Node) {
 	n.child = append(n.child, c...)
+}
+
+func (n *node) AddChildToBegin(c ...Node) {
+	n.child = append(c, n.child...)
+}
+
+func (n *node) AddChild(pos int, c ...Node) {
+	n.child = append(append(n.child[:pos], c...), n.child[pos:]...)
 }
 
 func (n *node) Delete(pos int) {

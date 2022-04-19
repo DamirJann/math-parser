@@ -13,31 +13,31 @@ func TestLexicalAnalyzer_Tokenize(t *testing.T) {
 		scenario func(*testing.T)
 	}{
 		{
-			name:     "Happy flow. Tokenize with basic operations",
+			name:     "Happy flow. Process with basic operations",
 			scenario: happyFlowTokenizeWithBasicOperations,
 		},
 		{
-			name:     "Happy flow. Tokenize with all operations",
+			name:     "Happy flow. Process with all operations",
 			scenario: happyFlowTokenizeWithAllOperations,
 		},
 		{
-			name:     "Happy flow. Tokenize empty expression",
+			name:     "Happy flow. Process empty expression",
 			scenario: happyFlowTokenizeEmptyExpression,
 		},
 		{
-			name:     "Happy flow. Tokenize the only lexem",
+			name:     "Happy flow. Process the only lexem",
 			scenario: happyFlowTokenizeTheOnlyLexem,
 		},
 		{
-			name:     "Happy flow. Tokenize `0`",
+			name:     "Happy flow. Process `0`",
 			scenario: happyFlowTokenize0,
 		},
 		{
-			name:     "Happy flow. Tokenize 0123",
+			name:     "Happy flow. Process 0123",
 			scenario: happyFlowTokenize0123,
 		},
 		{
-			name:     "Happy flow. Tokenize expression with brackets",
+			name:     "Happy flow. Process expression with brackets",
 			scenario: happyFlowTokenizeExpressionWithBrackets,
 		},
 	}

@@ -18,14 +18,14 @@ func NewPreprocessing() Preprocessor {
 }
 
 type Preprocessor interface {
-	tokenize(string) (output string)
+	Process(string) (output string)
 }
 
 type preprocessor struct {
 	logging context.Context
 }
 
-func (preprocessor) tokenize(input string) (output string) {
+func (preprocessor) Process(input string) (output string) {
 	output = strings.ReplaceAll(input, SPACE, EMPTY)
 	return output
 }
