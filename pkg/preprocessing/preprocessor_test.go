@@ -28,7 +28,7 @@ func happyFlowGetRidOfSpace(t *testing.T) {
 	input := "   4+5-1 + 10 - var1   - 1   "
 
 	// act
-	output := preprocessor.tokenize(input)
+	output := preprocessor.Process(input)
 
 	// assert
 	assert.Equal(t, output, "4+5-1+10-var1-1")
