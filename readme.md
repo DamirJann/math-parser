@@ -30,3 +30,11 @@ Computed by https://mikedevice.github.io/first-follow/
 
 ![Lexical Analyzer Automata](https://github.com/DamirJann/math-parser/blob/master/img/automata_for_lexical_analyzer.drawio.png)
 
+## Supported 
+* Operations:
+  * MULTIPLICATION - `*`
+  * DIVISION - `/`
+  * PLUS - `+`
+  * MINUS - `-`
+* Numbers:
+  * Integer

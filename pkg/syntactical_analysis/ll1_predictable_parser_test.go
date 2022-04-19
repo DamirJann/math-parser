@@ -19,7 +19,7 @@ func TestLexicalAnalyzer_Tokenize(t *testing.T) {
 			scenario: happyFlowParseAddition,
 		},
 		{
-			name:     "Happy flow. Parse substraction",
+			name:     "Happy flow. Parse subtraction",
 			scenario: happyFlowParseSubtraction,
 		},
 		{
