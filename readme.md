@@ -1,3 +1,9 @@
+### Running
+```
+ go run . --expr "34+5+3/5-4*(4+545)/3"
+```
+
+
 ### Grammar
 
 This is LL(1) grammar
@@ -38,3 +44,4 @@ Computed by https://mikedevice.github.io/first-follow/
   * MINUS - `-`
 * Numbers:
   * Integer
+

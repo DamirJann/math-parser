@@ -1,15 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"context"
+	"flag"
 	"fmt"
 	"math-parser/pkg/compilation"
 	"math-parser/pkg/lexical_analysis"
 	"math-parser/pkg/preprocessing"
 	syntactical_analyzer "math-parser/pkg/syntactical_analysis"
 	"math-parser/pkg/utils/logging"
-	"os"
 )
 
 func main() {
@@ -21,13 +20,14 @@ func main() {
 	syntacticalAnalyzer := syntactical_analyzer.NewLL1PredictableParser(ctx)
 	compiler := compilation.NewCompiler(preprocessor, lexicalAnalyzer, syntacticalAnalyzer)
 
-	in := bufio.NewReader(os.Stdin)
-	expr, _, _ := in.ReadLine()
-	res, err := compiler.Evaluate(string(expr))
+	var expr string
+	flag.StringVar(&expr, "expr", "", "expression")
+	flag.Parse()
 
+	res, err := compiler.Evaluate(expr)
 	if err != nil {
 		fmt.Printf("error: %s", err.Error())
 	} else {
-		fmt.Printf("Evaluation of `%s` is equal to %d", string(expr), res)
+		fmt.Printf("Evaluation of `%s` is equal to %d", expr, res)
 	}
 }
